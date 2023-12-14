@@ -1,7 +1,7 @@
 var URL="http://172.17.14.56/cse383_final/final.php";
 var numOrders = 0;
 
-updateNumOrders();
+//updateNumOrders();
 getAllOrders();
 $(document).ready(function () {
 
@@ -9,9 +9,21 @@ $(document).ready(function () {
 		var order_id = $(this).val();
 		showOrder(order_id);
 	});
+
+	$('#dateForm').submit(function (event) {
+                event.preventDefault();
+                var minDate= $('#minDate').val();
+                var maxDate = $('#maxDate').val();
+                filterOrdersByDate(minDate, maxDate);
+        });
+
+	$('#resetButton').click(function () {
+                getAllOrders();
+        });
+
 });
 
-function updateNumOrders(){
+/*function updateNumOrders(){
 	a=$.ajax({
 		url: URL + '/getMostRecentOrderNum',
 		method: "GET"
@@ -21,7 +33,7 @@ function updateNumOrders(){
 	}).fail(function(error) {
 		constole.error("Error:", error);
 	});
-}
+}*/
 
 function getAllOrders() {
 	a=$.ajax({
@@ -30,6 +42,8 @@ function getAllOrders() {
 	}).done(function(data) {
 		var results = data.result;
 		var tableBody = $('#ordersTable');
+		var numOrders = results.length;
+                $("#numOrders").html(numOrders);
 
 		tableBody.empty();
 
@@ -107,4 +121,30 @@ function print(total, products) {
     };
 
     newWindow.focus();
+}
+
+function filterOrdersByDate(min, max) {
+        a=$.ajax({
+                url: URL + '/filterOrdersByDate?min='+min+'&max='+max,
+                method: "GET"
+        }).done(function(data) {
+                var results = data.result;
+                var tableBody = $('#ordersTable');
+		var numOrders = results.length;
+                $("#numOrders").html(numOrders);
+
+                tableBody.empty();
+
+                for (var i = 0; i < results.length; i++) {
+                        var row = $('<tr>');
+                        row.append($('<td>').text(results[i].orderDate));
+                        row.append($('<td>').text(results[i].numItems));
+                        row.append($('<td>').text(results[i].totPrice));
+                        row.append('<td><button class="showOrderBtn" value="' + results[i].order_id + '">Show Order</button></td>');
+
+                        tableBody.append(row);
+                }
+        }).fail(function(error) {
+                console.error("Error:", error);
+        });
 }

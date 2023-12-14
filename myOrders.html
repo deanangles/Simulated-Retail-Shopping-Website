@@ -45,6 +45,16 @@
                 </table>
 		</div>
 
+		<form id="dateForm">
+                        <label for="minDate">Minimum Order Date: </label>
+                        <input type="date" id="minDate" name="minDate" value="1000-01-01">
+                        <label for="maxDate">Maximum Order Date: </label>
+                        <input type="date" id="maxDate" name="maxDate" value="3000-12-31">
+                        <button type="submit">Search</button>
+                </form><br>
+
+		<button id="resetButton">Reset Filters</button><br><br>
+
 		<h2>All Orders</h2>
 
 		<h3 style='display: inline;' id='numOrders'></h3><h3 style='display: inline;'> Orders</h3><br><br>

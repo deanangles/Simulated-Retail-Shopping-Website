@@ -179,5 +179,12 @@ class final_rest
 		}
 
 	}
+
+	public static function filterOrdersByDate($min, $max){
+		$retData["result"] = GET_SQL("SELECT o.order_id, o.orderDate, COUNT(*) AS numItems, SUM(p.price) AS totPrice FROM orders o LEFT JOIN product p ON o.product_id = p.product_id WHERE o.orderDate >= ? AND o.orderDate <= ? GROUP BY o.order_id ORDER BY o.orderDate DESC",$min,$max);
+		$retData["status"] = 0;
+		$retData["message"]= "Filtered orders by date";
+		return json_encode ($retData);
+	}
 }
 
